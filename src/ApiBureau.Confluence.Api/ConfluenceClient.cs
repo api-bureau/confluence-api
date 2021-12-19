@@ -1,5 +1,7 @@
+using ApiBureau.Confluence.Api.Dtos;
 using IdentityModel.Client;
 using Microsoft.Extensions.Options;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace ApiBureau.Confluence.Api
@@ -8,8 +10,7 @@ namespace ApiBureau.Confluence.Api
     {
         private readonly ConfluenceSettings _settings;
         private readonly HttpClient _client;
-        private string? _accessToken;
-        //private DateTime? _tokenExpireTime;
+
         private static JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
@@ -17,28 +18,22 @@ namespace ApiBureau.Confluence.Api
 
         public ConfluenceClient(IOptions<ConfluenceSettings> settings, HttpClient client)
         {
+            if (string.IsNullOrWhiteSpace(settings.Value.BaseUrl))
+                throw new ArgumentNullException(nameof(settings.Value.BaseUrl), "BaseUrl is missing in the appsettings.json or secret.json in ConfluenceSettings section.");
+
             _settings = settings.Value;
             _client = client;
 
-            _client.DefaultRequestHeaders.Add("LicenseKey", _settings.LicenseKey);
+            _client.BaseAddress = new Uri(_settings.BaseUrl);
+            _client.SetBasicAuthentication(_settings.Email, _settings.UserApiToken);
+            //_client.DefaultRequestHeaders.Add("Authorization", BasicAuthenticationHeaderValue.EncodeCredential(_settings.Email, _settings.UserApiToken));
         }
 
-        public async Task AuthenticateAsync()
+        public async Task<ContentDto?> GetContentAsync(int id, string expand = "body.view")
         {
-            var request = new PasswordTokenRequest
-            {
-                UserName = _settings.UserName,
-                Password = _settings.Password,
-                Address = _settings.BaseUrl + "/auth/login" 
-            };
+            var result = await _client.GetFromJsonAsync<ContentDto>($"/wiki/rest/api/content/{id}?expand={expand}");
 
-            var token = await _client.RequestPasswordTokenAsync(request);
-
-            if (token is null) return;
-
-            _accessToken = token.AccessToken;
-
-            _client.SetBearerToken(_accessToken);
+            return result;
         }
     }
 }

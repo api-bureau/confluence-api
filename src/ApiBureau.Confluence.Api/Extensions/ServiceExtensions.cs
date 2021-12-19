@@ -6,7 +6,7 @@ namespace ApiBureau.Confluence.Api.Extensions
 {
     public static class ServiceExtensions
     {
-        public static IServiceCollection AddCloudCall(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddConfluence(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<ConfluenceClient>(options => configuration.GetSection(nameof(ConfluenceClient)).Bind(options));
 
