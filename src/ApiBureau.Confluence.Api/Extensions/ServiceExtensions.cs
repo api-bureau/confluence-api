@@ -8,7 +8,7 @@ namespace ApiBureau.Confluence.Api.Extensions
     {
         public static IServiceCollection AddConfluence(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<ConfluenceClient>(options => configuration.GetSection(nameof(ConfluenceClient)).Bind(options));
+            services.Configure<ConfluenceSettings>(options => configuration.GetSection(nameof(ConfluenceSettings)).Bind(options));
 
             services.AddHttpClient<ConfluenceClient>()
                 .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(20))
