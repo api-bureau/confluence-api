@@ -1,2 +1,2 @@
-# confluence-api
+# Confluence API
 Confluence API
