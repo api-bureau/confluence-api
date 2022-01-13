@@ -1,3 +1,4 @@
+using ApiBureau.Confluence.Api.Core;
 using ApiBureau.Confluence.Api.Dtos;
 using IdentityModel.Client;
 using Microsoft.Extensions.Options;
@@ -43,6 +44,10 @@ namespace ApiBureau.Confluence.Api
             return result;
         }
 
+        /// <summary>
+        /// Returns all spaces
+        /// </summary>
+        /// <returns></returns>
         public async Task<ResultDto<SpaceDto>> GetSpaceAsync()
         {
             var result = await _client.GetFromJsonAsync<ResultDto<SpaceDto>>($"{ApiUrlPrefix}/space");
@@ -50,11 +55,11 @@ namespace ApiBureau.Confluence.Api
             return result ?? new();
         }
 
-        public async Task<ResultDto<ContentDto>> GetSpacePagesAsync(string? key)
+        public async Task<ResultDto<ContentDto>> GetSpaceContentsAsync(string key, SpaceExpand? expand = null)
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
 
-            var result = await _client.GetFromJsonAsync<ResultDto<ContentDto>>($"{ApiUrlPrefix}/space/{key}/content/page");
+            var result = await _client.GetFromJsonAsync<ResultDto<ContentDto>>($"{ApiUrlPrefix}/space/{key}/content{expand?.Get() ?? ""}");
 
             return result ?? new();
         }
