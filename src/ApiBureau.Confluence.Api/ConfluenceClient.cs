@@ -59,7 +59,9 @@ namespace ApiBureau.Confluence.Api
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
 
-            var result = await _client.GetFromJsonAsync<ResultDto<ContentDto>>($"{ApiUrlPrefix}/space/{key}/content{expand?.Get() ?? ""}");
+            expand ??= new SpaceExpand();
+
+            var result = await _client.GetFromJsonAsync<ResultDto<ContentDto>>($"{ApiUrlPrefix}/space/{key}/content{expand.Get()}");
 
             return result ?? new();
         }
