@@ -10,12 +10,14 @@ public class SpaceExpand
 
     public SpaceExpand AddAncestors() => AddItem("ancestors");
 
+    public SpaceExpand AddChildren(string type = "attachment") => AddItem($"children.{type}");
+
     /// <summary>
     /// Body can be view or storage
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    public SpaceExpand AddBody(string type = "view") => AddItem("body." + type);
+    public SpaceExpand AddBody(string type = "view") => AddItem($"body.{type}");
 
     public SpaceExpand AddItem(string text)
     {

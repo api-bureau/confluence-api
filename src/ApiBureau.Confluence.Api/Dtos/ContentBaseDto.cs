@@ -1,10 +1,10 @@
-﻿namespace ApiBureau.Confluence.Api.Dtos
+namespace ApiBureau.Confluence.Api.Dtos
 {
-    public class ContentBaseDto
+    public class ContentBaseDto<T>
     {
-        public int Id { get; set; }
+        public T Id { get; set; }
         public string Type { get; set; } = null!;
-        public string Title { get; set; } = null!;
         public string Status { get; set; } = null!;
+        public string Title { get; set; } = null!;
     }
 }
