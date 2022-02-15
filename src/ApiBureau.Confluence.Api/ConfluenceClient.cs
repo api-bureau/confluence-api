@@ -25,14 +25,14 @@ public class ConfluenceClient
     }
 
     /// <summary>
-    /// Get page content
+    /// Returns a content entity
     /// </summary>
     /// <param name="id"></param>
     /// <param name="expand">Use body.view in view format or body.storage in storage format</param>
     /// <returns></returns>
     public async Task<ContentDto?> GetContentAsync(int id, string expand = "body.view")
     {
-        var result = await _client.GetFromJsonAsync<ContentDto>($"{ApiUrlPrefix}/content/{id}?expand={expand}");
+        var result = await _client.GetFromJsonAsync<ContentDto>($"{ApiUrlPrefix}/{Constants.ContentUrl}/{id}?expand={expand}");
 
         return result;
     }
@@ -43,11 +43,19 @@ public class ConfluenceClient
     /// <returns></returns>
     public async Task<ResultDto<SpaceDto>> GetSpaceAsync()
     {
-        var result = await _client.GetFromJsonAsync<ResultDto<SpaceDto>>($"{ApiUrlPrefix}/space");
+        var result = await _client.GetFromJsonAsync<ResultDto<SpaceDto>>($"{ApiUrlPrefix}/{Constants.SpaceUrl}");
 
         return result ?? new();
     }
 
+    /// <summary>
+    /// Returns space content entities
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="expand"></param>
+    /// <param name="limit"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
     public async Task<List<ContentDto>> GetSpaceContentAsync(string key, SpaceExpand? expand = null, int limit = 100)
     {
         if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
@@ -56,9 +64,7 @@ public class ConfluenceClient
 
         var items = new List<ContentDto>();
 
-        //var pageResult = await _client.GetFromJsonAsync<PageResultDto<ContentDto>>($"{ApiUrlPrefix}/space/{key}/content?limit={limit}{expand.Get()}");
-
-        var pageResult = await GetAsync<ContentDto>($"{ApiUrlPrefix}/space/{key}/content?limit={limit}{expand.Get()}");
+        var pageResult = await GetAsync<ContentDto>($"{ApiUrlPrefix}/{Constants.SpaceUrl}/{key}/{Constants.ContentUrl}?limit={limit}{expand.Get()}");
 
         items.AddRange(pageResult?.Page?.Results ?? new());
 
@@ -66,7 +72,7 @@ public class ConfluenceClient
 
         while (pageResult?.Page?.Size > 0 && pageResult?.Page?.Size == limit)
         {
-            pageResult = await GetAsync<ContentDto>($"{ApiUrlPrefix}/space/{key}/content?limit={limit}&start={limit * counter}{expand.Get()}");
+            pageResult = await GetAsync<ContentDto>($"{ApiUrlPrefix}/{Constants.SpaceUrl}/{key}/{Constants.ContentUrl}?limit={limit}&start={limit * counter}{expand.Get()}");
 
             items.AddRange(pageResult?.Page?.Results ?? new());
 
@@ -74,6 +80,13 @@ public class ConfluenceClient
         }
 
         return items;
+    }
+
+    public async Task<Stream> GetAttachmentAsync(int contentId, string attachmentId)
+    {
+        if (string.IsNullOrWhiteSpace(attachmentId)) throw new ArgumentNullException(nameof(attachmentId));
+
+        return await _client.GetStreamAsync($"{ApiUrlPrefix}/{Constants.ContentUrl}/{contentId}/child/attachment/{attachmentId}/download");
     }
 
     private Task<PageResultDto<T>?> GetAsync<T>(string url)
