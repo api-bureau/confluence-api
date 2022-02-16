@@ -3,11 +3,12 @@ namespace ApiBureau.Confluence.Api.Dtos;
 public class ContentDto : ContentBaseDto<int>
 {
     public int SpaceId { get; set; }
-    public BodyDto Body { get; set; } = default!;
+    public BodyDto Body { get; set; } = null!;
     public VersionDto? Version { get; set; }
     public SpaceDto? Space { get; set; }
     public List<ContentBaseDto<int>> Ancestors { get; set; } = new();
     public ChildrenDto? Children { get; set; }
+    public ExtensionsDto Extensions { get; set; } = null!;
 }
 
 public class ChildrenDto
@@ -17,10 +18,15 @@ public class ChildrenDto
 
 public class AttachmentDto : ContentBaseDto<string>
 {
-    public ExtensionDto? Extensions { get; set; }
+    public AttachmentExtensionDto? Extensions { get; set; }
 }
 
-public class ExtensionDto
+public class AttachmentExtensionDto
 {
     public string MediaType { get; set; } = null!;
+}
+
+public class ExtensionsDto
+{
+    public int Position { get; set; }
 }
