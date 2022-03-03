@@ -38,6 +38,17 @@ public class ConfluenceClient
     }
 
     /// <summary>
+    /// Returns content properties
+    /// </summary>
+    /// <returns></returns>
+    public async Task<ResultDto<PropertyDto>> GetContentPropertiesAsync(int contentId)
+    {
+        var result = await _client.GetFromJsonAsync<ResultDto<PropertyDto>>($"{ApiUrlPrefix}/{Constants.ContentUrl}/{contentId}/property");
+
+        return result ?? new();
+    }
+
+    /// <summary>
     /// Returns all spaces
     /// </summary>
     /// <returns></returns>
