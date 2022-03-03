@@ -1,7 +1,6 @@
-﻿namespace ApiBureau.Confluence.Api.Dtos
+namespace ApiBureau.Confluence.Api.Dtos;
+
+public class ViewDto
 {
-    public class ViewDto
-    {
-        public string? Value { get; set; }
-    }
+    public string? Value { get; set; }
 }

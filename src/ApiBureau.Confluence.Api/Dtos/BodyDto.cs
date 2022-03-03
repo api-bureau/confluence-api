@@ -1,7 +1,6 @@
-﻿namespace ApiBureau.Confluence.Api.Dtos
+namespace ApiBureau.Confluence.Api.Dtos;
+
+public class BodyDto
 {
-    public class BodyDto
-    {
-        public ViewDto View { get; set; } = default!;
-    }
+    public ViewDto View { get; set; } = default!;
 }
