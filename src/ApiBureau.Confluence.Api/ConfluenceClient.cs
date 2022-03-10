@@ -43,9 +43,9 @@ public class ConfluenceClient
     /// <returns></returns>
     public async Task<ResultDto<PropertyDto>> GetContentPropertiesAsync(int contentId)
     {
-        var result = await _client.GetFromJsonAsync<ResultDto<PropertyDto>>($"{ApiUrlPrefix}/{Constants.ContentUrl}/{contentId}/property");
+        var response = await _client.GetAsync($"{ApiUrlPrefix}/{Constants.ContentUrl}/{contentId}/property");
 
-        return result ?? new();
+        return await response.Content.ReadFromJsonAsync<ResultDto<PropertyDto>>() ?? new();
     }
 
     /// <summary>
