@@ -24,6 +24,7 @@ public class AttachmentDto : ContentBaseDto<string>
 public class AttachmentExtensionDto
 {
     public string MediaType { get; set; } = null!;
+    public int FileSize { get; set; }
 }
 
 public class ExtensionsDto
