@@ -1,4 +1,4 @@
-namespace ApiBureau.Confluence.Api;
+namespace ApiBureau.Confluence.Api.Core;
 
 public class ConfluenceSettings
 {
