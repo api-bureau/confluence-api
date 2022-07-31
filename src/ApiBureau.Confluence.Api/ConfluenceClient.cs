@@ -1,10 +1,11 @@
 using ApiBureau.Confluence.Api.Endpoints;
+using ApiBureau.Confluence.Api.Http;
 
 namespace ApiBureau.Confluence.Api;
 
 public class ConfluenceClient
 {
-    private readonly HttpHelper _httpHelper;
+    private readonly ApiConnection _apiConnection;
 
     public AttachmentEndpoint Attachment { get; set; }
     public ContentEndpoint Content { get; set; }
@@ -12,10 +13,10 @@ public class ConfluenceClient
 
     public ConfluenceClient(HttpClient client, IOptions<ConfluenceSettings> settings)
     {
-        _httpHelper = new HttpHelper(client, settings);
+        _apiConnection = new ApiConnection(client, settings);
 
-        Attachment = new AttachmentEndpoint(_httpHelper);
-        Content = new ContentEndpoint(_httpHelper);
-        Spaces = new SpaceEndpoint(_httpHelper);
+        Attachment = new AttachmentEndpoint(_apiConnection);
+        Content = new ContentEndpoint(_apiConnection);
+        Spaces = new SpaceEndpoint(_apiConnection);
     }
 }

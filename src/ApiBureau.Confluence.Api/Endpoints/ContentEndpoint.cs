@@ -1,10 +1,8 @@
-﻿namespace ApiBureau.Confluence.Api.Endpoints;
+namespace ApiBureau.Confluence.Api.Endpoints;
 
-public class ContentEndpoint
+public class ContentEndpoint : BaseEndpoint
 {
-    private readonly HttpHelper _helper;
-
-    public ContentEndpoint(HttpHelper helper) => _helper = helper;
+    public ContentEndpoint(ApiConnection apiConnection) : base(apiConnection) { }
 
     /// <summary>
     /// Returns a content entity
@@ -13,7 +11,7 @@ public class ContentEndpoint
     /// <param name="expand">Use body.view in view format or body.storage in storage format</param>
     /// <returns></returns>
     public Task<ContentDto?> GetAsync(int id, string expand = "body.view")
-        => _helper.GetAsync<ContentDto>($"{Constants.ContentUrl}/{id}?expand={expand}");
+        => ApiConnection.GetAsync<ContentDto>($"{Constants.ContentUrl}/{id}?expand={expand}");
 
     /// <summary>
     /// Returns content properties
@@ -21,7 +19,7 @@ public class ContentEndpoint
     /// <returns></returns>
     public async Task<ResultDto<PropertyDto>> GetPropertiesAsync(int contentId)
     {
-        return await _helper.GetResultAsync<PropertyDto>($"{Constants.ContentUrl}/{contentId}/property") ?? new();
+        return await ApiConnection.GetResultAsync<PropertyDto>($"{Constants.ContentUrl}/{contentId}/property") ?? new();
         //return await response.Content.ReadFromJsonAsync<ResultDto<PropertyDto>>() ?? new();
     }
 }

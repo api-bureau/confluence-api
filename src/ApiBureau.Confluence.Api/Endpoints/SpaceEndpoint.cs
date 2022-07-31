@@ -1,11 +1,8 @@
 namespace ApiBureau.Confluence.Api.Endpoints;
 
-public class SpaceEndpoint
+public class SpaceEndpoint : BaseEndpoint
 {
-    //private const string Endpoint = "/calls";
-    private readonly HttpHelper _helper;
-
-    public SpaceEndpoint(HttpHelper helper) => _helper = helper;
+    public SpaceEndpoint(ApiConnection apiConnection) : base(apiConnection) { }
 
     /// <summary>
     /// Returns all spaces
@@ -13,7 +10,7 @@ public class SpaceEndpoint
     /// <returns></returns>
     public async Task<ResultDto<SpaceDto>> GetAsync()
     {
-        var result = await _helper.GetResultAsync<SpaceDto>(Constants.SpaceUrl);
+        var result = await ApiConnection.GetResultAsync<SpaceDto>(Constants.SpaceUrl);
         //var result = await _helper.GetFromJsonAsync<ResultDto<SpaceDto>>($"{ApiUrlPrefix}/{Constants.SpaceUrl}");
 
         return result ?? new();
@@ -32,7 +29,7 @@ public class SpaceEndpoint
 
         expand ??= new SpaceExpand();
 
-        var result = await _helper.GetSpaceContentAsync<ContentDto>($"{Constants.SpaceUrl}/{key}/{Constants.ContentUrl}", expand.Get(), limit);
+        var result = await ApiConnection.GetSpaceContentAsync<ContentDto>($"{Constants.SpaceUrl}/{key}/{Constants.ContentUrl}", expand.Get(), limit);
 
         return result ?? new List<ContentDto>();
     }

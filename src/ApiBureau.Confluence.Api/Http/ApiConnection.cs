@@ -1,6 +1,6 @@
-namespace ApiBureau.Confluence.Api.Core;
+namespace ApiBureau.Confluence.Api.Http;
 
-public class HttpHelper
+public class ApiConnection
 {
     private readonly HttpClient _client;
     private readonly ConfluenceSettings _settings;
@@ -11,7 +11,7 @@ public class HttpHelper
         PropertyNameCaseInsensitive = true,
     };
 
-    public HttpHelper(HttpClient httpClient, IOptions<ConfluenceSettings> settings)
+    public ApiConnection(HttpClient httpClient, IOptions<ConfluenceSettings> settings)
     {
         if (string.IsNullOrWhiteSpace(settings.Value.BaseUrl))
             throw new ArgumentNullException(nameof(settings.Value.BaseUrl), "BaseUrl is missing in the appsettings.json or secret.json in ConfluenceSettings section.");
