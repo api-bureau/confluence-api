@@ -1,5 +1,4 @@
 using ApiBureau.Confluence.Api.Endpoints;
-using ApiBureau.Confluence.Api.Http;
 
 namespace ApiBureau.Confluence.Api;
 

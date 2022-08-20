@@ -13,7 +13,8 @@ public class ResultDto<T> : ErrorDto
     public LinksDto? Links { get; set; }
 }
 
-public class LinksDto {
+public class LinksDto
+{
     public string? Next { get; set; }
     public string? Prev { get; set; }
 }
