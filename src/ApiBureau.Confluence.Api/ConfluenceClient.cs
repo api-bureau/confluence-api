@@ -6,9 +6,9 @@ public class ConfluenceClient
 {
     private readonly ApiConnection _apiConnection;
 
-    public AttachmentEndpoint Attachment { get; set; }
-    public ContentEndpoint Content { get; set; }
-    public SpaceEndpoint Spaces { get; set; }
+    public AttachmentEndpoint Attachment { get; }
+    public ContentEndpoint Content { get; }
+    public SpaceEndpoint Spaces { get; }
 
     public ConfluenceClient(HttpClient client, IOptions<ConfluenceSettings> settings)
     {
