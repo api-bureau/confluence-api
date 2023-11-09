@@ -22,6 +22,9 @@ public class ApiConnection
         _client.BaseAddress = new Uri(_settings.BaseUrl);
         _client.SetBasicAuthentication(_settings.Email, _settings.UserApiToken);
 
+        // recently, the Body is missing for some reason, so the UserAgent is added to the header
+        _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36");
+
         //_client.DefaultRequestHeaders.Add("Authorization", BasicAuthenticationHeaderValue.EncodeCredential(_settings.Email, _settings.UserApiToken));
     }
 
