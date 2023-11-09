@@ -1,0 +1,9 @@
+global using ApiBureau.Confluence.Api.Console.Services;
+global using ApiBureau.Confluence.Api.Dtos;
+global using ApiBureau.Confluence.Api.Extensions;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Hosting;
+global using Microsoft.Extensions.Logging;
+global using Serilog;
+global using Serilog.Events;
