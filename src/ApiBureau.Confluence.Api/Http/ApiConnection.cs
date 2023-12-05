@@ -1,8 +1,11 @@
+using Microsoft.Extensions.Logging;
+
 namespace ApiBureau.Confluence.Api.Http;
 
 public class ApiConnection
 {
     private readonly HttpClient _client;
+    private readonly ILogger<ApiConnection> _logger;
     private readonly ConfluenceSettings _settings;
     private const string ApiUrlPrefix = "/wiki/rest/api";
 
@@ -11,16 +14,16 @@ public class ApiConnection
         PropertyNameCaseInsensitive = true,
     };
 
-    public ApiConnection(HttpClient httpClient, IOptions<ConfluenceSettings> settings)
+    public ApiConnection(HttpClient httpClient, IOptions<ConfluenceSettings> settings, ILogger<ApiConnection> logger)
     {
-        if (string.IsNullOrWhiteSpace(settings.Value.BaseUrl))
-            throw new ArgumentNullException(nameof(settings.Value.BaseUrl), "BaseUrl is missing in the appsettings.json or secret.json in ConfluenceSettings section.");
-
+        _logger = logger;
         _settings = settings.Value;
         _client = httpClient;
 
-        _client.BaseAddress = new Uri(_settings.BaseUrl);
-        _client.SetBasicAuthentication(_settings.Email, _settings.UserApiToken);
+        ConfluenceValidator.ValidateSettings(_settings, _logger);
+
+        _client.BaseAddress = new Uri(_settings.BaseUrl!);
+        _client.SetBasicAuthentication(_settings.Email!, _settings.UserApiToken!);
 
         // recently, the Body is missing for some reason, so the UserAgent is added to the header
         _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36");
@@ -43,7 +46,7 @@ public class ApiConnection
     /// <summary>
     /// Returns space content entities
     /// </summary>
-    /// <param name="key"></param>
+    /// <param name="url"></param>
     /// <param name="expand"></param>
     /// <param name="limit"></param>
     /// <returns></returns>

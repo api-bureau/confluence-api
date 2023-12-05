@@ -21,7 +21,7 @@ public class DataService
         {
             _logger.LogInformation(space.Name);
 
-            if (space.Name == "MySpacke") // e.g Tech
+            if (space.Name == "MySpace") // e.g Tech
             {
                 var content = await GetContentDtoAsync(space.Key);
             }
