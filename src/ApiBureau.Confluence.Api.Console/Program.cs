@@ -1,5 +1,5 @@
 var hostBuilder = Host.CreateDefaultBuilder(args)
-        .ConfigureAppConfiguration((_, config) => ConfigurationBuilder.SetupConfiguration(args, config))
+        .ConfigureAppConfiguration((_, config) => AppConfigurationBuilder.SetupConfiguration(args, config))
         .ConfigureServices(ServiceConfiguration.SetupServices)
         .Build();
 
