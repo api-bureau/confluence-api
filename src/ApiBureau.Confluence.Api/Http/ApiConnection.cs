@@ -16,9 +16,9 @@ public class ApiConnection
 
     public ApiConnection(HttpClient httpClient, IOptions<ConfluenceSettings> settings, ILogger<ApiConnection> logger)
     {
+        _client = httpClient;
         _logger = logger;
         _settings = settings.Value;
-        _client = httpClient;
 
         ConfluenceValidator.ValidateSettings(_settings, _logger);
 
