@@ -23,3 +23,11 @@ public class PageResultDto<T>
 {
     public ResultDto<T>? Page { get; set; }
 }
+
+public class ResultDtoV2<T> : ErrorsDtoV2
+{
+    public List<T> Results { get; set; } = [];
+
+    [JsonPropertyName("_links")]
+    public LinksDto? Links { get; set; }
+}

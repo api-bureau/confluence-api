@@ -23,3 +23,11 @@ public class ContentEndpoint : BaseEndpoint
         //return await response.Content.ReadFromJsonAsync<ResultDto<PropertyDto>>() ?? new();
     }
 }
+
+public class BlogPostEndpoint : BaseEndpoint
+{
+    public BlogPostEndpoint(ApiConnection apiConnection) : base(apiConnection) { }
+
+    public Task<ContentDto?> GetAsync(string bodyFormat = "storage")
+        => ApiConnection.GetAsync<ContentDto>($"{Constants.BlogPostUrl}?body-format={bodyFormat}");
+}

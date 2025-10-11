@@ -8,6 +8,7 @@ public class ApiConnection
     private readonly ILogger<ApiConnection> _logger;
     private readonly ConfluenceSettings _settings;
     private const string ApiUrlPrefix = "/wiki/rest/api";
+    private const string ApiV2UrlPrefix = "/wiki/api/v2";
 
     private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
     {
@@ -36,6 +37,9 @@ public class ApiConnection
 
     public Task<ResultDto<T>?> GetResultAsync<T>(string url)
         => _client.GetFromJsonAsync<ResultDto<T>>($"{ApiUrlPrefix}/{url}");
+
+    public Task<ResultDtoV2<T>?> GetResultV2Async<T>(string url)
+        => _client.GetFromJsonAsync<ResultDtoV2<T>>($"{ApiV2UrlPrefix}/{url}");
 
     public Task<PageResultDto<T>?> GetPageResultAsync<T>(string url)
         => _client.GetFromJsonAsync<PageResultDto<T>>(url);
