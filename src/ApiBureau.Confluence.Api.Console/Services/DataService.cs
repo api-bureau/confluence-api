@@ -16,9 +16,9 @@ public class DataService
 
     public async Task RunAsync()
     {
-        //await GetBlogPostsAsync();
+        await GetBlogPostsAsync();
 
-        //return;
+        return;
 
         var spaces = await GetSpacesAsync();
 
