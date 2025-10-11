@@ -37,7 +37,7 @@ public class BlogPostEndpoint : BaseEndpoint
     /// <param name="limit">The maximum number of items to retrieve. Must be a positive integer. Defaults to 25. Maximum is 250.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a <see cref="ContentDto"/>
     /// representing the blog post, or <see langword="null"/> if no content is found.</returns>
-    public Task<ResultDtoV2<ContentDto>?> GetAsync(string bodyFormat = "storage", int limit = 25)
+    public Task<PagedResponse<ContentDto>?> GetAsync(string bodyFormat = "storage", int limit = 25)
     {
         return ApiConnection.GetResultV2Async<ContentDto>($"{Constants.BlogPostUrl}?body-format={bodyFormat}&limit={limit}");
     }

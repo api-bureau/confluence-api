@@ -38,8 +38,8 @@ public class ConfluenceHttpClient
     public Task<ResultDto<T>?> GetResultAsync<T>(string url)
         => _client.GetFromJsonAsync<ResultDto<T>>($"{ApiUrlPrefix}/{url}");
 
-    public Task<ResultDtoV2<T>?> GetResultV2Async<T>(string url)
-        => _client.GetFromJsonAsync<ResultDtoV2<T>>($"{ApiV2UrlPrefix}/{url}");
+    public Task<PagedResponse<T>?> GetResultV2Async<T>(string url)
+        => _client.GetFromJsonAsync<PagedResponse<T>>($"{ApiV2UrlPrefix}/{url}");
 
     public Task<PageResultDto<T>?> GetPageResultAsync<T>(string url)
         => _client.GetFromJsonAsync<PageResultDto<T>>(url);
