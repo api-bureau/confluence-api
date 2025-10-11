@@ -2,7 +2,7 @@ namespace ApiBureau.Confluence.Api.Endpoints;
 
 public class AttachmentEndpoint : BaseEndpoint
 {
-    public AttachmentEndpoint(ApiConnection apiConnection) : base(apiConnection) { }
+    public AttachmentEndpoint(ConfluenceHttpClient apiConnection) : base(apiConnection) { }
 
     public Task<Stream> GetAsync(int contentId, string attachmentId)
     {

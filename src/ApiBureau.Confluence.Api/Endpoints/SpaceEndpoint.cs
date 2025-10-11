@@ -2,7 +2,7 @@ namespace ApiBureau.Confluence.Api.Endpoints;
 
 public class SpaceEndpoint : BaseEndpoint
 {
-    public SpaceEndpoint(ApiConnection apiConnection) : base(apiConnection) { }
+    public SpaceEndpoint(ConfluenceHttpClient apiConnection) : base(apiConnection) { }
 
     /// <summary>
     /// Returns all spaces

@@ -2,10 +2,10 @@ using Microsoft.Extensions.Logging;
 
 namespace ApiBureau.Confluence.Api.Http;
 
-public class ApiConnection
+public class ConfluenceHttpClient
 {
     private readonly HttpClient _client;
-    private readonly ILogger<ApiConnection> _logger;
+    private readonly ILogger<ConfluenceHttpClient> _logger;
     private readonly ConfluenceSettings _settings;
     private const string ApiUrlPrefix = "/wiki/rest/api";
     private const string ApiV2UrlPrefix = "/wiki/api/v2";
@@ -15,7 +15,7 @@ public class ApiConnection
         PropertyNameCaseInsensitive = true,
     };
 
-    public ApiConnection(HttpClient httpClient, IOptions<ConfluenceSettings> settings, ILogger<ApiConnection> logger)
+    public ConfluenceHttpClient(HttpClient httpClient, IOptions<ConfluenceSettings> settings, ILogger<ConfluenceHttpClient> logger)
     {
         _client = httpClient;
         _logger = logger;
@@ -23,11 +23,11 @@ public class ApiConnection
 
         ConfluenceValidator.ValidateSettings(_settings, _logger);
 
-        _client.BaseAddress = new Uri(_settings.BaseUrl!);
-        _client.SetBasicAuthentication(_settings.Email!, _settings.UserApiToken!);
+        //_client.BaseAddress = new Uri(_settings.BaseUrl!);
+        //_client.SetBasicAuthentication(_settings.Email!, _settings.UserApiToken!);
 
         // recently, the Body is missing for some reason, so the UserAgent is added to the header
-        _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36");
+        //_client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36");
 
         //_client.DefaultRequestHeaders.Add("Authorization", BasicAuthenticationHeaderValue.EncodeCredential(_settings.Email, _settings.UserApiToken));
     }

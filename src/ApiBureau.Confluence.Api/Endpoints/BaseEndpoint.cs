@@ -2,7 +2,7 @@ namespace ApiBureau.Confluence.Api.Endpoints;
 
 public class BaseEndpoint
 {
-    protected ApiConnection ApiConnection { get; private set; }
+    protected ConfluenceHttpClient ApiConnection { get; private set; }
 
-    public BaseEndpoint(ApiConnection apiConnection) => ApiConnection = apiConnection;
+    public BaseEndpoint(ConfluenceHttpClient apiConnection) => ApiConnection = apiConnection;
 }
