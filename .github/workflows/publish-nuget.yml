@@ -1,0 +1,48 @@
+name: Publish NuGet
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Package version to publish
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore src/ApiBureau.Confluence.Api/ApiBureau.Confluence.Api.csproj
+
+      - name: Build
+        run: dotnet build src/ApiBureau.Confluence.Api/ApiBureau.Confluence.Api.csproj --configuration Release --no-restore
+
+      - name: Pack from release
+        if: github.event_name == 'release'
+        run: dotnet pack src/ApiBureau.Confluence.Api/ApiBureau.Confluence.Api.csproj --configuration Release --no-build --output ./artifacts /p:PackageVersion=${{ github.event.release.tag_name }}
+
+      - name: Pack from manual dispatch
+        if: github.event_name == 'workflow_dispatch'
+        run: dotnet pack src/ApiBureau.Confluence.Api/ApiBureau.Confluence.Api.csproj --configuration Release --no-build --output ./artifacts /p:PackageVersion=${{ inputs.version }}
+
+      - name: Publish package
+        run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Publish symbols
+        run: dotnet nuget push "./artifacts/*.snupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
