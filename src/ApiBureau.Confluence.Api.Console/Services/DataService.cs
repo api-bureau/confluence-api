@@ -17,9 +17,10 @@ public class DataService
     public async Task RunAsync()
     {
         await GetBlogPostsAsync();
+    }
 
-        return;
-
+    public async Task ProcessSpacesAsync()
+    {
         var spaces = await GetSpacesAsync();
 
         foreach (var space in spaces)
