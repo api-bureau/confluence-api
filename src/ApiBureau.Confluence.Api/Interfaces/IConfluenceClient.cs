@@ -2,8 +2,9 @@ namespace ApiBureau.Confluence.Api.Interfaces;
 
 public interface IConfluenceClient
 {
-    AttachmentEndpoint Attachment { get; }
-    BlogPostEndpoint BlogPost { get; }
-    ContentEndpoint Content { get; }
     SpaceEndpoint Spaces { get; }
+    PageEndpoint Pages { get; }
+    BlogPostEndpoint BlogPosts { get; }
+    AttachmentEndpoint Attachments { get; }
+    UserEndpoint Users { get; }
 }

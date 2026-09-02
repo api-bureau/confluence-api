@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace ApiBureau.Confluence.ApiV2.Dtos;
+namespace ApiBureau.Confluence.Api.Dtos;
 
-public sealed class PageV2Dto
+public sealed class PageDto
 {
     public string Id { get; set; } = string.Empty;
     public string? Status { get; set; }
@@ -16,9 +16,9 @@ public sealed class PageV2Dto
     public string? LastOwnerId { get; set; }
     public string? Subtype { get; set; }
     public DateTimeOffset? CreatedAt { get; set; }
-    public VersionV2Dto? Version { get; set; }
-    public BodyV2Dto? Body { get; set; }
+    public VersionDto? Version { get; set; }
+    public BodyDto? Body { get; set; }
 
     [JsonPropertyName("_links")]
-    public ConfluenceV2Links? Links { get; set; }
+    public ConfluenceLinks? Links { get; set; }
 }

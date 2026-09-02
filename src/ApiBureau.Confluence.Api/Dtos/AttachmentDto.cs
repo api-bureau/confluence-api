@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace ApiBureau.Confluence.ApiV2.Dtos;
+namespace ApiBureau.Confluence.Api.Dtos;
 
-public sealed class AttachmentV2Dto
+public sealed class AttachmentDto
 {
     public string Id { get; set; } = string.Empty;
     public string? Status { get; set; }
@@ -18,8 +18,8 @@ public sealed class AttachmentV2Dto
     public long? FileSize { get; set; }
     public string? WebuiLink { get; set; }
     public string? DownloadLink { get; set; }
-    public VersionV2Dto? Version { get; set; }
+    public VersionDto? Version { get; set; }
 
     [JsonPropertyName("_links")]
-    public ConfluenceV2Links? Links { get; set; }
+    public ConfluenceLinks? Links { get; set; }
 }

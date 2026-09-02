@@ -1,36 +1,32 @@
+using Microsoft.AspNetCore.WebUtilities;
+
 namespace ApiBureau.Confluence.Api.Endpoints;
 
-public class SpaceEndpoint : BaseEndpoint
+public sealed class SpaceEndpoint : BaseEndpoint
 {
-    public SpaceEndpoint(ConfluenceHttpClient apiConnection) : base(apiConnection) { }
+    private const string ResourcePath = "spaces";
 
-    /// <summary>
-    /// Returns all spaces
-    /// </summary>
-    /// <returns></returns>
-    public async Task<ResultDto<SpaceDto>> GetAsync()
+    public SpaceEndpoint(ConfluenceHttpClient httpClient) : base(httpClient) { }
+
+    public Task<PagedResponse<SpaceDto>?> GetAsync(int limit = 25, string? key = null, CancellationToken token = default)
+        => HttpClient.GetPageAsync<SpaceDto>(BuildListPath(limit, key), token);
+
+    public Task<List<SpaceDto>> GetAllAsync(int limit = 250, string? key = null, CancellationToken token = default)
+        => HttpClient.GetAllAsync<SpaceDto>(BuildListPath(limit, key), token);
+
+    public Task<SpaceDto?> GetByIdAsync(string spaceId, CancellationToken token = default)
     {
-        var result = await ApiConnection.GetResultAsync<SpaceDto>(Constants.SpaceUrl);
-        //var result = await _helper.GetFromJsonAsync<ResultDto<SpaceDto>>($"{ApiUrlPrefix}/{Constants.SpaceUrl}");
-
-        return result ?? new();
+        ArgumentException.ThrowIfNullOrWhiteSpace(spaceId);
+        return HttpClient.GetAsync<SpaceDto>($"{ResourcePath}/{Uri.EscapeDataString(spaceId)}", token);
     }
 
-    /// <summary>
-    /// Returns space content entities
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="expand"></param>
-    /// <param name="limit"></param>
-    /// <returns></returns>
-    public async Task<List<ContentDto>> GetContentAsync(string key, SpaceExpand? expand = null, int limit = 100)
+    private static string BuildListPath(int limit, string? key)
     {
-        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+        ArgumentOutOfRangeException.ThrowIfLessThan(limit, 1);
 
-        expand ??= new SpaceExpand();
+        var query = new Dictionary<string, string?> { ["limit"] = limit.ToString() };
+        if (!string.IsNullOrWhiteSpace(key)) query["keys"] = key;
 
-        var result = await ApiConnection.GetSpaceContentAsync<ContentDto>($"{Constants.SpaceUrl}/{key}/{Constants.ContentUrl}", expand.Get(), limit);
-
-        return result ?? new List<ContentDto>();
+        return QueryHelpers.AddQueryString(ResourcePath, query);
     }
 }

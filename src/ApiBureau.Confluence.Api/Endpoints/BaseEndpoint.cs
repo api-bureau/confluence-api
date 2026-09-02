@@ -1,8 +1,8 @@
 namespace ApiBureau.Confluence.Api.Endpoints;
 
-public class BaseEndpoint
+public abstract class BaseEndpoint
 {
-    protected ConfluenceHttpClient ApiConnection { get; private set; }
+    protected ConfluenceHttpClient HttpClient { get; }
 
-    public BaseEndpoint(ConfluenceHttpClient apiConnection) => ApiConnection = apiConnection;
+    protected BaseEndpoint(ConfluenceHttpClient httpClient) => HttpClient = httpClient;
 }

@@ -1,5 +1,4 @@
 <Solution>
   <Project Path="src/ApiBureau.Confluence.Api/ApiBureau.Confluence.Api.csproj" />
-  <Project Path="src/ApiBureau.Confluence.ApiV2.Console/ApiBureau.Confluence.ApiV2.Console.csproj" />
-  <Project Path="src/ApiBureau.Confluence.ApiV2/ApiBureau.Confluence.ApiV2.csproj" />
+  <Project Path="src/ApiBureau.Confluence.Api.Console/ApiBureau.Confluence.Api.Console.csproj" />
 </Solution>

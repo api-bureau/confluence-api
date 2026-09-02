@@ -1,20 +1,18 @@
+using System.Text.Json.Serialization;
+
 namespace ApiBureau.Confluence.Api.Dtos;
 
-public class BlogPostDto : ContentBaseDto<string>
+public sealed class BlogPostDto
 {
+    public string Id { get; set; } = string.Empty;
+    public string? Status { get; set; }
+    public string Title { get; set; } = string.Empty;
     public string? SpaceId { get; set; }
-    public string? AuthordId { get; set; }
-    public DateTime? CreatedAt { get; set; }
-    public BodyDtoV2 Body { get; set; } = null!;
-}
+    public string? AuthorId { get; set; }
+    public DateTimeOffset? CreatedAt { get; set; }
+    public VersionDto? Version { get; set; }
+    public BodyDto? Body { get; set; }
 
-public class BodyDtoV2
-{
-    public StorageDto? Storage { get; set; }
-}
-
-public class StorageDto
-{
-    public string? Representation { get; set; }
-    public string? Value { get; set; }
+    [JsonPropertyName("_links")]
+    public ConfluenceLinks? Links { get; set; }
 }

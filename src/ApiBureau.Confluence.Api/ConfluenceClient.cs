@@ -1,17 +1,19 @@
 namespace ApiBureau.Confluence.Api;
 
-public class ConfluenceClient : IConfluenceClient
+public sealed class ConfluenceClient : IConfluenceClient
 {
-    public AttachmentEndpoint Attachment { get; }
-    public BlogPostEndpoint BlogPost { get; }
-    public ContentEndpoint Content { get; }
     public SpaceEndpoint Spaces { get; }
+    public PageEndpoint Pages { get; }
+    public BlogPostEndpoint BlogPosts { get; }
+    public AttachmentEndpoint Attachments { get; }
+    public UserEndpoint Users { get; }
 
-    public ConfluenceClient(ConfluenceHttpClient apiConnection)
+    public ConfluenceClient(ConfluenceHttpClient httpClient)
     {
-        Attachment = new AttachmentEndpoint(apiConnection);
-        BlogPost = new BlogPostEndpoint(apiConnection);
-        Content = new ContentEndpoint(apiConnection);
-        Spaces = new SpaceEndpoint(apiConnection);
+        Spaces = new SpaceEndpoint(httpClient);
+        Pages = new PageEndpoint(httpClient);
+        BlogPosts = new BlogPostEndpoint(httpClient);
+        Attachments = new AttachmentEndpoint(httpClient);
+        Users = new UserEndpoint(httpClient);
     }
 }

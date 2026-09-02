@@ -1,16 +1,16 @@
-using ApiBureau.Confluence.ApiV2.Interfaces;
+using ApiBureau.Confluence.Api.Interfaces;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
-namespace ApiBureau.Confluence.ApiV2.Console.Services;
+namespace ApiBureau.Confluence.Api.Console.Services;
 
-public sealed class ConfluenceV2ConsoleService
+public sealed class ConfluenceConsoleService
 {
-    private readonly IConfluenceV2Client _client;
-    private readonly ILogger<ConfluenceV2ConsoleService> _logger;
+    private readonly IConfluenceClient _client;
+    private readonly ILogger<ConfluenceConsoleService> _logger;
     private readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web) { WriteIndented = true };
 
-    public ConfluenceV2ConsoleService(IConfluenceV2Client client, ILogger<ConfluenceV2ConsoleService> logger)
+    public ConfluenceConsoleService(IConfluenceClient client, ILogger<ConfluenceConsoleService> logger)
     {
         _client = client;
         _logger = logger;

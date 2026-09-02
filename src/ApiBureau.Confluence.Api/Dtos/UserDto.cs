@@ -1,6 +1,6 @@
-namespace ApiBureau.Confluence.ApiV2.Dtos;
+namespace ApiBureau.Confluence.Api.Dtos;
 
-public sealed class UserV2Dto
+public sealed class UserDto
 {
     public string AccountId { get; set; } = string.Empty;
     public string? DisplayName { get; set; }

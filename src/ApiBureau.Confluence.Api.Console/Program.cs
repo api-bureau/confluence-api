@@ -1,24 +1,19 @@
-var hostBuilder = Host.CreateDefaultBuilder(args)
-        .ConfigureAppConfiguration((_, config) => AppConfigurationBuilder.SetupConfiguration(args, config))
-        .ConfigureServices(ServiceConfiguration.SetupServices)
-        .Build();
+using ApiBureau.Confluence.Api.Console.Services;
+using ApiBureau.Confluence.Api.Extensions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 
-await RunApplication(hostBuilder, args);
+var builder = Host.CreateApplicationBuilder(args);
 
-static async Task RunApplication(IHost hostBuilder, string[] args)
-{
-    var serviceScopeFactory = hostBuilder.Services.GetService<IServiceScopeFactory>();
+builder.Configuration.AddUserSecrets<Program>();
+builder.Services.AddSerilog(configuration => configuration.ReadFrom.Configuration(builder.Configuration));
+builder.Services.AddConfluence(builder.Configuration);
+builder.Services.AddScoped<ConfluenceConsoleService>();
 
-    using var scope = serviceScopeFactory?.CreateScope();
+using var host = builder.Build();
+using var scope = host.Services.CreateScope();
 
-    var service = scope?.ServiceProvider.GetService<DataService>();
-
-    if (service is null)
-    {
-        Console.WriteLine($"Failed to resolve {nameof(DataService)} from the service provider. Please ensure it is registered in the service collection.");
-
-        return;
-    }
-
-    await service.RunAsync();
-}
+var service = scope.ServiceProvider.GetRequiredService<ConfluenceConsoleService>();
+return await service.RunAsync(args);

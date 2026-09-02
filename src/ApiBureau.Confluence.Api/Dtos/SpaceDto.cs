@@ -1,10 +1,26 @@
+using System.Text.Json.Serialization;
+
 namespace ApiBureau.Confluence.Api.Dtos;
 
-public class SpaceDto
+public sealed class SpaceDto
 {
-    public int Id { get; set; }
-    public string Key { get; set; } = null!;
-    public string Name { get; set; } = null!;
-    public string Type { get; set; } = null!;
-    public string Status { get; set; } = null!;
+    public string Id { get; set; } = string.Empty;
+    public string Key { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string? Type { get; set; }
+    public string? Status { get; set; }
+    public string? AuthorId { get; set; }
+    public string? SpaceOwnerId { get; set; }
+    public string? HomepageId { get; set; }
+    public DateTimeOffset? CreatedAt { get; set; }
+    public SpaceDescriptionDto? Description { get; set; }
+
+    [JsonPropertyName("_links")]
+    public ConfluenceLinks? Links { get; set; }
+}
+
+public sealed class SpaceDescriptionDto
+{
+    public BodyRepresentationDto? Plain { get; set; }
+    public BodyRepresentationDto? View { get; set; }
 }
