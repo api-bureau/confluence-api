@@ -45,7 +45,7 @@ public sealed class ConfluenceHttpClient
     public Task<PagedResponse<T>?> GetPageAsync<T>(string path, CancellationToken token = default)
         => GetAsync<PagedResponse<T>>(path, token);
 
-    public async Task<List<T>> GetAllAsync<T>(string path, CancellationToken token = default)
+    public async Task<IReadOnlyList<T>> GetAllAsync<T>(string path, CancellationToken token = default)
     {
         var items = new List<T>();
         var visitedPaths = new HashSet<string>(StringComparer.Ordinal);

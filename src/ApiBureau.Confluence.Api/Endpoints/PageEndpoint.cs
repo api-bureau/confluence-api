@@ -2,35 +2,69 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace ApiBureau.Confluence.Api.Endpoints;
 
-public sealed class PageEndpoint : BaseEndpoint
+public sealed class PageEndpoint
 {
     private const string ResourcePath = "pages";
+    private readonly ConfluenceHttpClient _httpClient;
 
-    public PageEndpoint(ConfluenceHttpClient httpClient) : base(httpClient) { }
+    internal PageEndpoint(ConfluenceHttpClient httpClient)
+        => _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
 
-    public Task<PagedResponse<PageDto>?> GetAsync(string? bodyFormat = null, int limit = 25, CancellationToken token = default)
-        => HttpClient.GetPageAsync<PageDto>(BuildListPath(ResourcePath, bodyFormat, limit), token);
+    public Task<PagedResponse<PageDto>?> GetPageAsync(
+        string? bodyFormat = null,
+        int limit = 25,
+        CancellationToken cancellationToken = default)
+        => _httpClient.GetPageAsync<PageDto>(
+            BuildListPath(ResourcePath, bodyFormat, limit),
+            cancellationToken);
 
-    public Task<List<PageDto>> GetAllAsync(string? bodyFormat = null, int limit = 250, CancellationToken token = default)
-        => HttpClient.GetAllAsync<PageDto>(BuildListPath(ResourcePath, bodyFormat, limit), token);
+    public Task<IReadOnlyList<PageDto>> GetAllAsync(
+        string? bodyFormat = null,
+        int limit = 250,
+        CancellationToken cancellationToken = default)
+        => _httpClient.GetAllAsync<PageDto>(
+            BuildListPath(ResourcePath, bodyFormat, limit),
+            cancellationToken);
 
-    public Task<PagedResponse<PageDto>?> GetForSpaceAsync(string spaceId, string? bodyFormat = null, int limit = 25, CancellationToken token = default)
-        => HttpClient.GetPageAsync<PageDto>(BuildSpacePath(spaceId, bodyFormat, limit), token);
+    public Task<PagedResponse<PageDto>?> GetPageForSpaceAsync(
+        string spaceId,
+        string? bodyFormat = null,
+        int limit = 25,
+        CancellationToken cancellationToken = default)
+        => _httpClient.GetPageAsync<PageDto>(
+            BuildSpacePath(spaceId, bodyFormat, limit),
+            cancellationToken);
 
-    public Task<List<PageDto>> GetAllForSpaceAsync(string spaceId, string? bodyFormat = null, int limit = 250, CancellationToken token = default)
-        => HttpClient.GetAllAsync<PageDto>(BuildSpacePath(spaceId, bodyFormat, limit), token);
+    public Task<IReadOnlyList<PageDto>> GetAllForSpaceAsync(
+        string spaceId,
+        string? bodyFormat = null,
+        int limit = 250,
+        CancellationToken cancellationToken = default)
+        => _httpClient.GetAllAsync<PageDto>(
+            BuildSpacePath(spaceId, bodyFormat, limit),
+            cancellationToken);
 
-    public Task<PageDto?> GetByIdAsync(string pageId, string bodyFormat = "view", CancellationToken token = default)
+    public Task<PageDto?> GetByIdAsync(
+        string pageId,
+        string bodyFormat = "view",
+        CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(pageId);
-        return HttpClient.GetAsync<PageDto>(QueryHelpers.AddQueryString($"{ResourcePath}/{Uri.EscapeDataString(pageId)}", "body-format", bodyFormat), token);
+        ArgumentException.ThrowIfNullOrWhiteSpace(bodyFormat);
+        return _httpClient.GetAsync<PageDto>(
+            QueryHelpers.AddQueryString($"{ResourcePath}/{Uri.EscapeDataString(pageId)}", "body-format", bodyFormat),
+            cancellationToken);
     }
 
-    public Task<List<ContentPropertyDto>> GetPropertiesAsync(string pageId, int limit = 100, CancellationToken token = default)
+    public Task<IReadOnlyList<ContentPropertyDto>> GetAllPropertiesAsync(
+        string pageId,
+        int limit = 100,
+        CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(pageId);
+        ArgumentOutOfRangeException.ThrowIfLessThan(limit, 1);
         var path = QueryHelpers.AddQueryString($"{ResourcePath}/{Uri.EscapeDataString(pageId)}/properties", "limit", limit.ToString());
-        return HttpClient.GetAllAsync<ContentPropertyDto>(path, token);
+        return _httpClient.GetAllAsync<ContentPropertyDto>(path, cancellationToken);
     }
 
     private static string BuildSpacePath(string spaceId, string? bodyFormat, int limit)

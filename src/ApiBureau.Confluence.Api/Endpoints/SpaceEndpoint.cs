@@ -2,22 +2,32 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace ApiBureau.Confluence.Api.Endpoints;
 
-public sealed class SpaceEndpoint : BaseEndpoint
+public sealed class SpaceEndpoint
 {
     private const string ResourcePath = "spaces";
+    private readonly ConfluenceHttpClient _httpClient;
 
-    public SpaceEndpoint(ConfluenceHttpClient httpClient) : base(httpClient) { }
+    internal SpaceEndpoint(ConfluenceHttpClient httpClient)
+        => _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
 
-    public Task<PagedResponse<SpaceDto>?> GetAsync(int limit = 25, string? key = null, CancellationToken token = default)
-        => HttpClient.GetPageAsync<SpaceDto>(BuildListPath(limit, key), token);
+    public Task<PagedResponse<SpaceDto>?> GetPageAsync(
+        int limit = 25,
+        string? key = null,
+        CancellationToken cancellationToken = default)
+        => _httpClient.GetPageAsync<SpaceDto>(BuildListPath(limit, key), cancellationToken);
 
-    public Task<List<SpaceDto>> GetAllAsync(int limit = 250, string? key = null, CancellationToken token = default)
-        => HttpClient.GetAllAsync<SpaceDto>(BuildListPath(limit, key), token);
+    public Task<IReadOnlyList<SpaceDto>> GetAllAsync(
+        int limit = 250,
+        string? key = null,
+        CancellationToken cancellationToken = default)
+        => _httpClient.GetAllAsync<SpaceDto>(BuildListPath(limit, key), cancellationToken);
 
-    public Task<SpaceDto?> GetByIdAsync(string spaceId, CancellationToken token = default)
+    public Task<SpaceDto?> GetByIdAsync(string spaceId, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(spaceId);
-        return HttpClient.GetAsync<SpaceDto>($"{ResourcePath}/{Uri.EscapeDataString(spaceId)}", token);
+        return _httpClient.GetAsync<SpaceDto>(
+            $"{ResourcePath}/{Uri.EscapeDataString(spaceId)}",
+            cancellationToken);
     }
 
     private static string BuildListPath(int limit, string? key)

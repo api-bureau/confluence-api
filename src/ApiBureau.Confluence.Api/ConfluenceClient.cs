@@ -10,6 +10,8 @@ public sealed class ConfluenceClient : IConfluenceClient
 
     public ConfluenceClient(ConfluenceHttpClient httpClient)
     {
+        ArgumentNullException.ThrowIfNull(httpClient);
+
         Spaces = new SpaceEndpoint(httpClient);
         Pages = new PageEndpoint(httpClient);
         BlogPosts = new BlogPostEndpoint(httpClient);

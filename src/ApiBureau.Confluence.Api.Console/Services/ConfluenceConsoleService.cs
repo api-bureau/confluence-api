@@ -29,31 +29,31 @@ public sealed class ConfluenceConsoleService
             switch (args[0].ToLowerInvariant())
             {
                 case "spaces":
-                    await WriteJsonAsync(await _client.Spaces.GetAllAsync(key: GetOptional(args, 1), token: token));
+                    await WriteJsonAsync(await _client.Spaces.GetAllAsync(key: GetOptional(args, 1), cancellationToken: token));
                     break;
                 case "space":
                     await WriteJsonAsync(await _client.Spaces.GetByIdAsync(GetRequired(args, 1, "space id"), token));
                     break;
                 case "space-pages":
-                    await WriteJsonAsync(await _client.Pages.GetAllForSpaceAsync(GetRequired(args, 1, "space id"), token: token));
+                    await WriteJsonAsync(await _client.Pages.GetAllForSpaceAsync(GetRequired(args, 1, "space id"), cancellationToken: token));
                     break;
                 case "page":
-                    await WriteJsonAsync(await _client.Pages.GetByIdAsync(GetRequired(args, 1, "page id"), token: token));
+                    await WriteJsonAsync(await _client.Pages.GetByIdAsync(GetRequired(args, 1, "page id"), cancellationToken: token));
                     break;
                 case "inspect-page":
                     await InspectPageAsync(GetRequired(args, 1, "page id"), token);
                     break;
                 case "properties":
-                    await WriteJsonAsync(await _client.Pages.GetPropertiesAsync(GetRequired(args, 1, "page id"), token: token));
+                    await WriteJsonAsync(await _client.Pages.GetAllPropertiesAsync(GetRequired(args, 1, "page id"), cancellationToken: token));
                     break;
                 case "attachments":
-                    await WriteJsonAsync(await _client.Attachments.GetAllForPageAsync(GetRequired(args, 1, "page id"), token: token));
+                    await WriteJsonAsync(await _client.Attachments.GetAllForPageAsync(GetRequired(args, 1, "page id"), cancellationToken: token));
                     break;
                 case "blogposts":
                     var spaceId = GetOptional(args, 1);
                     var posts = string.IsNullOrWhiteSpace(spaceId)
-                        ? await _client.BlogPosts.GetAllAsync(token: token)
-                        : await _client.BlogPosts.GetAllForSpaceAsync(spaceId, token: token);
+                        ? await _client.BlogPosts.GetAllAsync(cancellationToken: token)
+                        : await _client.BlogPosts.GetAllForSpaceAsync(spaceId, cancellationToken: token);
                     await WriteJsonAsync(posts);
                     break;
                 case "download":
@@ -79,7 +79,7 @@ public sealed class ConfluenceConsoleService
 
     private async Task InspectPageAsync(string pageId, CancellationToken token)
     {
-        var page = await _client.Pages.GetByIdAsync(pageId, token: token);
+        var page = await _client.Pages.GetByIdAsync(pageId, cancellationToken: token);
 
         await WriteJsonAsync(page);
 
@@ -88,8 +88,8 @@ public sealed class ConfluenceConsoleService
         System.Console.WriteLine(page?.Body?.View?.Value ?? "<no body.view returned>");
         System.Console.WriteLine("----- END BODY.VIEW HTML -----");
 
-        var properties = await _client.Pages.GetPropertiesAsync(pageId, token: token);
-        var attachments = await _client.Attachments.GetAllForPageAsync(pageId, token: token);
+        var properties = await _client.Pages.GetAllPropertiesAsync(pageId, cancellationToken: token);
+        var attachments = await _client.Attachments.GetAllForPageAsync(pageId, cancellationToken: token);
         var authorIds = new[] { page?.AuthorId, page?.Version?.AuthorId }
             .Where(id => !string.IsNullOrWhiteSpace(id))
             .Select(id => id!)
@@ -128,7 +128,7 @@ public sealed class ConfluenceConsoleService
 
     private static void WriteHelp()
     {
-        System.Console.WriteLine("Confluence REST API v2 inspection console");
+        System.Console.WriteLine("Confluence REST API v2 inspection console:");
         System.Console.WriteLine();
         System.Console.WriteLine("  spaces [key]");
         System.Console.WriteLine("  space <space-id>");
