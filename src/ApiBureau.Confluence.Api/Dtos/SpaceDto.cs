@@ -18,9 +18,3 @@ public sealed class SpaceDto
     [JsonPropertyName("_links")]
     public ConfluenceLinks? Links { get; set; }
 }
-
-public sealed class SpaceDescriptionDto
-{
-    public BodyRepresentationDto? Plain { get; set; }
-    public BodyRepresentationDto? View { get; set; }
-}

@@ -10,9 +10,3 @@ public sealed class BodyDto
     [JsonPropertyName("atlas_doc_format")]
     public BodyRepresentationDto? AtlasDocFormat { get; set; }
 }
-
-public sealed class BodyRepresentationDto
-{
-    public string? Representation { get; set; }
-    public string? Value { get; set; }
-}

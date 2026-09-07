@@ -98,7 +98,12 @@ public sealed class ConfluenceConsoleService
 
         System.Console.WriteLine();
         System.Console.WriteLine("----- RELATED DATA -----");
-        await WriteJsonAsync(new { properties, attachments, users });
+        await WriteJsonAsync(new Dictionary<string, object?>
+        {
+            ["properties"] = properties,
+            ["attachments"] = attachments,
+            ["users"] = users,
+        });
     }
 
     private async Task DownloadAsync(string attachmentId, string outputFile, CancellationToken token)
