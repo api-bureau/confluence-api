@@ -109,6 +109,7 @@ public sealed class ConfluenceHttpClient
         if (response.IsSuccessStatusCode) return;
 
         var responseBody = await response.Content.ReadAsStringAsync(token).ConfigureAwait(false);
+
         throw new ConfluenceApiException(response.StatusCode, response.ReasonPhrase, responseBody);
     }
 }
